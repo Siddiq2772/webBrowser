@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Patterns;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -14,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -25,11 +27,16 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     //components initialization
@@ -39,15 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar ;
     private ImageView reload ;
     private ImageView more ;
+    private TextToSpeech tts;
+    private String text;
 
-    @Override
-    public void onBackPressed() {
-        if(webView.canGoBack())
-            webView.goBack();
-        else
-            super.onBackPressed();
-
-    }
 
 
 
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        //on light mode whether device in light or not
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         webView = findViewById(R.id.web_view);
         cleanUrl = findViewById(R.id.clear_icon);
         input_url = findViewById(R.id.url_input);
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
 
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new myWebViewClient());
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -85,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setProgress(newProgress);
                 input_url.setText(webView.getUrl().toString());
+                if(newProgress==100)
+                    progressBar.setVisibility(View.INVISIBLE);
+
             }
 
         });
@@ -114,7 +120,23 @@ public class MainActivity extends AppCompatActivity {
                 webView.reload();
             }
         });
+        //tts implementation
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = tts.setLanguage(Locale.US); // Set language (e.g., US, UK)
 
+                    if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
+                        Toast.makeText(MainActivity.this, "Language not supported", Toast.LENGTH_SHORT).show();
+                    } else {
+
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "TTS initialization failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         more.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(this, v);
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -137,6 +159,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else if(item.getItemId()==R.id.forward)
                         webView.goForward();
+                    else if (item.getItemId() == R.id.tts) {
+                        Toast.makeText(MainActivity.this, "Processing large text, this may take a moment...", Toast.LENGTH_LONG).show();
+                        if (tts.isSpeaking())
+                                tts.stop();
+                        if (text.length() > 4000) {
+                            String[] parts = text.split("(?<=\\G.{4000})");
+                            for (String part : parts) {
+                                tts.speak(part, TextToSpeech.QUEUE_ADD, null, null);
+                                text ="";
+                            }
+                        } else {
+                            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
+                            text ="";
+
+                        }
+
+                    }
                     else
                         return false;
                     return true;
@@ -146,15 +185,6 @@ public class MainActivity extends AppCompatActivity {
             popup.getMenuInflater().inflate(R.menu.menu, popup.getMenu());
             popup.show();
         });
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -182,11 +212,34 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageFinished(WebView view, String url) {
+            // JavaScript to extract text
+            String js = "document.body.innerText";
+
+            webView.evaluateJavascript(js, new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    // Remove "\n" inside words but keep those separating sentences.
+                    text = value.replaceAll("([a-zA-Z0-9])\\\\n([a-zA-Z0-9])", "$1$2");
+                    System.out.println("Extracted Text: " + text);
+                }
+            });
+
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.INVISIBLE);
 
         }
     }
+
+
+    @Override
+    public void onBackPressed() {
+        if(webView.canGoBack())
+            webView.goBack();
+        else
+            super.onBackPressed();
+
+    }
+
 
 
 

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2"
+    android:background="@drawable/majorback"
+    >
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    >
+    <androidx.cardview.widget.CardView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="75dp"
+        android:layout_gravity="center">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo1"/>
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/input_fields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corner"
+        android:padding="4dp"
+
+        >
+
+
+
+        <EditText
+            android:id="@+id/url_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="6dp"
+            android:background="@null"
+            android:hint="Search or type url"
+            android:imeOptions="actionGo"
+            android:inputType="textUri"
+            android:textColor="@color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="20sp"
+            android:textCursorDrawable="@drawable/custom_cursor"
+
+            />
+
+
+
+        <ImageView
+            android:id="@+id/more_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_search_24"
+            android:layout_marginEnd="10dp"
+            />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        >
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="4dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/chrome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chrome"/>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="4dp"
+            android:layout_margin="20dp"
+
+            android:layout_gravity="center"
+            >
+            <ImageView
+                android:id="@+id/firefox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/firefox"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="4dp"
+            android:layout_margin="20dp"
+
+            android:layout_gravity="center"
+            >
+            <ImageView
+                android:id="@+id/bing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bing"/>
+        </androidx.cardview.widget.CardView>
+
+
+
+    </LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Search Engine:"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:layout_gravity="center"
+        android:textSize="20dp"
+        android:backgroundTint="@color/black"
+        android:textColor="#39D4F0"
+        android:layout_marginTop="20dp"
+        android:id="@+id/eng"
+        />
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/rb"
+        android:background="@drawable/rounded_corner"
+        android:visibility="invisible"
+        >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Google"
+            android:padding="10dp"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            app:buttonTint="#39D4F0"
+            android:drawableLeft="@drawable/google"
+            android:textStyle="bold"
+
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text=" Brave"
+            android:textColor="@color/black"
+            app:buttonTint="#39D4F0"
+            android:drawableLeft="@drawable/brave"
+            android:padding="10dp"
+            android:textStyle="bold"
+
+
+            />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text=" DuckDuckGo"
+            android:textColor="@color/black"
+            app:buttonTint="#39D4F0"
+            android:drawableLeft="@drawable/brave"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/duck_duck_go"
+
+
+
+            />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text=" Bing"
+            android:textColor="@color/black"
+            app:buttonTint="#39D4F0"
+            android:drawableLeft="@drawable/brave"
+            android:padding="10dp"
+            android:drawableStart="@drawable/bing"
+
+            />
+    </RadioGroup>
+
+
+</LinearLayout>
+</LinearLayout>

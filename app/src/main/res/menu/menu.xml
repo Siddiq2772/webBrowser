@@ -4,16 +4,18 @@
     >
     <item
         android:id="@+id/copy_link"
-        android:icon="@drawable/baseline_link_24"
         android:title="copy link" />
+
     <item android:title="share link"
-        android:icon="@drawable/baseline_share_24"
         android:id="@+id/share_link"
         />
     <item
         android:id="@+id/forward"
-        android:icon="@drawable/baseline_arrow_forward_24"
         android:title="forward"
-        app:showAsAction="ifRoom"
         />
+    <item
+        android:id="@+id/tts"
+        android:title="Text to speech"
+        />
+
 </menu>
