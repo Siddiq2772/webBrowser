@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ public class MainActivity2 extends AppCompatActivity {
     private String search_engine = "https://google.com/search?q=";
     private EditText input_url;
     private RadioButton google;
+    private ImageView meta, youtube, wikipedia;
+    private ImageView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,54 @@ public class MainActivity2 extends AppCompatActivity {
         rg = findViewById(R.id.rb);
         input_url = findViewById(R.id.url_input);
         google = findViewById(R.id.google);
+        meta = findViewById(R.id.meta);
+        youtube = findViewById(R.id.youtube);
+        wikipedia = findViewById(R.id.wikipedia);
+        search = findViewById(R.id.search);
         google.setChecked(true);
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                intent.putExtra("search_engine", search_engine);
+                intent.putExtra("text", input_url.getText().toString());
+                startActivity(intent);
+            }
+        });
+
+        meta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                intent.putExtra("search_engine", search_engine);
+                intent.putExtra("text", input_url.getText().toString());
+                intent.putExtra("shortcut","www.meta.ai");
+                startActivity(intent);
+            }
+        });
+
+        youtube.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                intent.putExtra("search_engine", search_engine);
+                intent.putExtra("text", input_url.getText().toString());
+                intent.putExtra("shortcut","www.youtube.com");
+                startActivity(intent);
+            }
+        });
+
+        wikipedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                intent.putExtra("search_engine", search_engine);
+                intent.putExtra("text", input_url.getText().toString());
+                intent.putExtra("shortcut","www.wikipedia.org");
+                startActivity(intent);
+            }
+        });
 
         input_url.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -71,7 +121,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.google) {
-                    search_engine = "https://google.com/search?q=";
+                    search_engine = "https://www.google.com/search?q=";
                     rg.setVisibility(View.INVISIBLE);
 
                 } else if (checkedId == R.id.brave) {
@@ -79,11 +129,11 @@ public class MainActivity2 extends AppCompatActivity {
                     rg.setVisibility(View.INVISIBLE);
 
                 } else if (checkedId == R.id.duckduckgo) {
-                    search_engine = "https://duckduckgo.com/?q=";
+                    search_engine = "https://www.duckduckgo.com/?q=";
                     rg.setVisibility(View.INVISIBLE);
 
                 } else if (checkedId == R.id.bing) {
-                    search_engine = "https://bing.com/search?q=";
+                    search_engine = "https://www.bing.com/search?q=";
                     rg.setVisibility(View.INVISIBLE);
 
                 }

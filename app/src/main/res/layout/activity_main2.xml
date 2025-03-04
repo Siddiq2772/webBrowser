@@ -58,7 +58,7 @@
 
 
         <ImageView
-            android:id="@+id/more_icon"
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -85,11 +85,13 @@
             android:layout_gravity="center">
 
             <ImageView
-                android:id="@+id/chrome"
+                android:id="@+id/youtube"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/chrome"/>
+                android:src="@drawable/youtube"
+
+                />
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:layout_width="50dp"
@@ -101,11 +103,11 @@
             android:layout_gravity="center"
             >
             <ImageView
-                android:id="@+id/firefox"
+                android:id="@+id/meta"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/firefox"/>
+                android:src="@drawable/meta"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -118,10 +120,11 @@
             android:layout_gravity="center"
             >
             <ImageView
+                android:id="@+id/wikipedia"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bing"/>
+                android:src="@drawable/wikipedia"/>
         </androidx.cardview.widget.CardView>
 
 
@@ -146,6 +149,7 @@
         android:layout_gravity="center"
         android:id="@+id/rb"
         android:background="@drawable/rounded_corner"
+        android:visibility="invisible"
         >
         <RadioButton
             android:id="@+id/google"

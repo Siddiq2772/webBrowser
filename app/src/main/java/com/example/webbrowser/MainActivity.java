@@ -49,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageView more ;
     private TextToSpeech tts;
     private String text;
+    private boolean isLoading;
     String search_engine;
 
 
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,9 +76,13 @@ public class MainActivity extends AppCompatActivity {
         more = findViewById(R.id.more_icon);
 
 
+
         Intent intent = getIntent();
         search_engine= intent.getStringExtra("search_engine");
         text = intent.getStringExtra("text");
+        String shortcut = intent.getStringExtra("shortcut");
+
+
 
 
 
@@ -86,8 +92,13 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
+        webSettings.setDomStorageEnabled(true);
 
-        lodMyUrl(text);
+
+        if(shortcut!=null)
+            lodMyUrl(shortcut);
+        else
+            lodMyUrl(text);
 
         webView.setWebViewClient(new myWebViewClient());
         webView.setWebChromeClient(new WebChromeClient(){
@@ -168,21 +179,34 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else if(item.getItemId()==R.id.forward)
                         webView.goForward();
-                    else if (item.getItemId() == R.id.tts) {
+                    else if (item.getItemId() == R.id.tts && !isLoading) {
+
                         Toast.makeText(MainActivity.this, "Processing large text, this may take a moment...", Toast.LENGTH_LONG).show();
+                        // JavaScript to extract text
+                        webView.evaluateJavascript("document.body.innerText", new ValueCallback<String>() {
+                            @Override
+                            public void onReceiveValue(String value) {
+                                // Remove "\n" inside words but keep those separating sentences.
+                                text = value.replaceAll("([a-zA-Z0-9])\\\\n([a-zA-Z0-9])", "$1$2");
+                                System.out.println("Extracted Text: " + text);
+                            }
+                        });
                         if (tts.isSpeaking())
                                 tts.stop();
                         if (text.length() > 4000) {
                             String[] parts = text.split("(?<=\\G.{4000})");
                             for (String part : parts) {
                                 tts.speak(part, TextToSpeech.QUEUE_ADD, null, null);
-                                text ="";
                             }
                         } else {
                             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
-                            text ="";
 
                         }
+
+                    }
+                    else if(item.getItemId()==R.id.HomePage){
+                        MainActivity.super.onBackPressed();
+                        tts.stop();
 
                     }
                     else
@@ -218,21 +242,18 @@ public class MainActivity extends AppCompatActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             progressBar.setVisibility(View.VISIBLE);
+            isLoading = true;
+
+
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            // JavaScript to extract text
-            String js = "document.body.innerText";
 
-            webView.evaluateJavascript(js, new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-                    // Remove "\n" inside words but keep those separating sentences.
-                    text = value.replaceAll("([a-zA-Z0-9])\\\\n([a-zA-Z0-9])", "$1$2");
-                    System.out.println("Extracted Text: " + text);
-                }
-            });
+            webView.evaluateJavascript("(function() { document.body.classList.add('force-light-mode'); })()", null);
+            isLoading = false;
+
+
 
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.INVISIBLE);
@@ -247,6 +268,8 @@ public class MainActivity extends AppCompatActivity {
             webView.goBack();
         else
             super.onBackPressed();
+        tts.stop();
+
 
     }
 

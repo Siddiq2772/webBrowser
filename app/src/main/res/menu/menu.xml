@@ -17,5 +17,10 @@
         android:id="@+id/tts"
         android:title="Text to speech"
         />
+    <item
+        android:id="@+id/HomePage"
+        android:title="Go Home"
+        />
+
 
 </menu>
