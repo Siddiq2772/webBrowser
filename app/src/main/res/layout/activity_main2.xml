@@ -118,7 +118,6 @@
             android:layout_gravity="center"
             >
             <ImageView
-                android:id="@+id/bing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -131,7 +130,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Search Engine:"
+        android:text="Select Engine"
         android:textStyle="bold"
         android:textAllCaps="true"
         android:layout_gravity="center"
@@ -147,9 +146,9 @@
         android:layout_gravity="center"
         android:id="@+id/rb"
         android:background="@drawable/rounded_corner"
-        android:visibility="invisible"
         >
         <RadioButton
+            android:id="@+id/google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=" Google"
@@ -171,6 +170,7 @@
             android:drawableLeft="@drawable/brave"
             android:padding="10dp"
             android:textStyle="bold"
+            android:id="@+id/brave"
 
 
             />
@@ -185,7 +185,7 @@
             android:padding="10dp"
             android:textStyle="bold"
             android:drawableStart="@drawable/duck_duck_go"
-
+            android:id="@+id/duckduckgo"
 
 
             />
@@ -201,6 +201,7 @@
             android:drawableLeft="@drawable/brave"
             android:padding="10dp"
             android:drawableStart="@drawable/bing"
+            android:id="@+id/bing"
 
             />
     </RadioGroup>

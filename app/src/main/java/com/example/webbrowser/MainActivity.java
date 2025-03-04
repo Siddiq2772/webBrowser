@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView more ;
     private TextToSpeech tts;
     private String text;
+    String search_engine;
 
 
 
@@ -71,14 +73,21 @@ public class MainActivity extends AppCompatActivity {
         reload= findViewById(R.id.reload_icon);
         more = findViewById(R.id.more_icon);
 
-        //run google in webview
-        webView.loadUrl("https://www.google.com");
+
+        Intent intent = getIntent();
+        search_engine= intent.getStringExtra("search_engine");
+        text = intent.getStringExtra("text");
+
+
+
 
         WebSettings webSettings = webView.getSettings();
 
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
+
+        lodMyUrl(text);
 
         webView.setWebViewClient(new myWebViewClient());
         webView.setWebChromeClient(new WebChromeClient(){
@@ -192,10 +201,11 @@ public class MainActivity extends AppCompatActivity {
 
     void lodMyUrl(String url){
         boolean match = Patterns.WEB_URL.matcher(url.trim()).matches();
+
         if(match)
             webView.loadUrl("https://"+url);
         else
-            webView.loadUrl("https://www.google.com/search?q="+url);
+            webView.loadUrl(search_engine+url);
 
     }
     class myWebViewClient extends WebViewClient{
