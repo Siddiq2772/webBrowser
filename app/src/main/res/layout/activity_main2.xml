@@ -150,6 +150,9 @@
         android:id="@+id/rb"
         android:background="@drawable/rounded_corner"
         android:visibility="invisible"
+        android:padding="10dp"
+        android:alpha="0.7"
+
         >
         <RadioButton
             android:id="@+id/google"
